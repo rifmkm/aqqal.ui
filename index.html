@@ -3,45 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integrated Chatbot Layout</title>
+    <title>Aqqal AI | Desktop Fixed Sidebar</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: sans-serif; }
+        /* 1. RESET & LAYOUT */
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; font-family: sans-serif; }
+        .wrapper { display: flex; height: 100vh; width: 100vw; }
         
-        /* Two-column layout */
-        .page-wrapper {
-            display: flex;
-            height: 100vh;
-            width: 100vw;
-        }
+        /* 2. MAIN CONTENT */
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; background: #fff; }
 
-        .main-content {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-        }
-
+        /* 3. THE SIDEBAR CONTAINER */
         .chat-sidebar {
-            width: 400px;
+            width: 450px; /* Slightly wider for better chatbot readability */
+            height: 100vh;
             border-left: 1px solid #ddd;
-            background: #f9f9f9;
-            position: relative;
-            display: flex;
-            flex-direction: column;
+            background: #fff;
+            position: relative; /* This acts as the anchor for the widget */
+            z-index: 10;
         }
 
-        /* Mobile View: Sidebar moves to bottom */
-        @media (max-width: 768px) {
-            .page-wrapper { flex-direction: column; overflow-y: auto; }
-            .chat-sidebar { width: 100%; height: 500px; border-left: none; border-top: 1px solid #ddd; }
+        /* 4. ULTIMATE DESKTOP VISIBILITY OVERRIDES */
+        /* These rules target the widget container directly and strip away "Floating" logic */
+        
+        /* The root widget div */
+        .elfsight-app-a70084b9-07a2-42e4-9480-857ed3984983 {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+            visibility: visible !important;
+        }
+
+        /* Target the actual chat window that Elfsight creates */
+        [class*="Window__WindowContainer-sc"] {
+            position: absolute !important;
+            inset: 0 !important; /* Forces top, left, bottom, right to 0 */
+            width: 100% !important;
+            height: 100% !important;
+            max-height: 100vh !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            transform: none !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: flex !important;
+            z-index: 9999 !important;
+        }
+
+        /* Hide the floating bubble button so it doesn't overlap the chat */
+        [class*="FloatingButton__FloatingButtonContainer-sc"],
+        [class*="ChatButton__Container-sc"] {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        /* 5. MOBILE ADAPTATION */
+        @media (max-width: 900px) {
+            .wrapper { flex-direction: column; overflow-y: auto; }
+            .chat-sidebar { width: 100%; height: 600px; border-left: none; border-top: 1px solid #ddd; }
         }
     </style>
 </head>
 <body>
 
-<div class="page-wrapper">
+<div class="wrapper">
     <main class="main-content">
-        <h1>Your Website Content</h1>
-        <p>The chatbot should appear on the right side.</p>
+        <h1>Project Content</h1>
+        <p>If you see a white box on the right, it means the widget is loading.</p>
+        <p><strong>Troubleshooting:</strong> If the widget is still blank, press F12 and click "Console". Look for errors like "Refused to frame".</p>
     </main>
 
     <aside class="chat-sidebar">
@@ -49,6 +82,35 @@
         <div class="elfsight-app-a70084b9-07a2-42e4-9480-857ed3984983"></div>
     </aside>
 </div>
+
+<script>
+    /**
+     * THE "FORCE TRIGGER" SCRIPT
+     * Floating widgets often stay "closed" until a click event happens.
+     * This script mimics that click event automatically.
+     */
+    function forceWidgetOpen() {
+        const bubble = document.querySelector('[class*="FloatingButton__FloatingButtonContainer-sc"] button, [class*="ChatButton__Container-sc"]');
+        const chatWindow = document.querySelector('[class*="Window__WindowContainer-sc"]');
+
+        if (bubble && !chatWindow) {
+            bubble.click();
+            console.log("Desktop visibility: Forcing open...");
+        }
+    }
+
+    // Check every 500ms until the widget is found and opened
+    const openCheck = setInterval(() => {
+        forceWidgetOpen();
+        if (document.querySelector('[class*="Window__WindowContainer-sc"]')) {
+            console.log("Desktop visibility: Success.");
+            clearInterval(openCheck);
+        }
+    }, 500);
+
+    // Backup: Try to open again when the window fully loads
+    window.addEventListener('load', forceWidgetOpen);
+</script>
 
 </body>
 </html>
