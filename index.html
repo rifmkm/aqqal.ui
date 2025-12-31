@@ -5,81 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Integrated Chatbot Layout</title>
     <style>
-        /* 1. GLOBAL LAYOUT SYSTEM */
-        :root {
-            --sidebar-width: 400px;
-            --main-bg: #ffffff;
-            --sidebar-bg: #f9f9f9;
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden; /* Prevents double scrollbars on the main page */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        .wrapper {
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: sans-serif; }
+        
+        /* Two-column layout */
+        .page-wrapper {
             display: flex;
             height: 100vh;
             width: 100vw;
         }
 
-        /* 2. LEFT SIDE: YOUR CONTENT */
         .main-content {
             flex: 1;
             padding: 40px;
             overflow-y: auto;
-            background-color: var(--main-bg);
         }
 
-        /* 3. RIGHT SIDE: THE CHATBOT PANEL */
-        .chatbot-sidebar {
-            width: var(--sidebar-width);
-            height: 100%;
-            background-color: var(--sidebar-bg);
-            border-left: 1px solid #e0e0e0;
+        .chat-sidebar {
+            width: 400px;
+            border-left: 1px solid #ddd;
+            background: #f9f9f9;
             position: relative;
             display: flex;
             flex-direction: column;
         }
 
-        /* Responsive Breakpoint for Mobile */
-        @media (max-width: 900px) {
-            .wrapper { flex-direction: column; overflow-y: auto; }
-            .main-content { height: auto; flex: none; }
-            .chatbot-sidebar { width: 100%; height: 600px; border-left: none; border-top: 1px solid #e0e0e0; }
-        }
-
-        /* 4. OVERRIDING ELFSIGHT'S FLOATING BEHAVIOR */
-        /* Note: Keep these styles here as a backup to the settings you put in the Elfsight dashboard */
-        .elfsight-app-a70084b9-07a2-42e4-9480-857ed3984983 {
-            height: 100% !important;
-            width: 100% !important;
+        /* Mobile View: Sidebar moves to bottom */
+        @media (max-width: 768px) {
+            .page-wrapper { flex-direction: column; overflow-y: auto; }
+            .chat-sidebar { width: 100%; height: 500px; border-left: none; border-top: 1px solid #ddd; }
         }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
-    
+<div class="page-wrapper">
     <main class="main-content">
-        <h1>Your Main Page Title</h1>
-        <p>This is where your website content lives. As you scroll this area, the chatbot on the right will remain fixed in place.</p>
-        
-        <div style="margin-top: 50px; padding: 20px; border: 1px dashed #ccc; border-radius: 8px;">
-            <h3>Feature Section</h3>
-            <p>The layout uses <strong>Flexbox</strong> to ensure the sidebar takes up exactly 400px while the content fills the rest of the screen.</p>
-        </div>
+        <h1>Your Website Content</h1>
+        <p>The chatbot should appear on the right side.</p>
     </main>
 
-    <aside class="chatbot-sidebar">
+    <aside class="chat-sidebar">
         <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-a70084b9-07a2-42e4-9480-857ed3984983" data-elfsight-app-lazy></div>
+        <div class="elfsight-app-a70084b9-07a2-42e4-9480-857ed3984983"></div>
     </aside>
-
 </div>
 
 </body>
